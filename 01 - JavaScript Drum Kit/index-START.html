@@ -7,7 +7,6 @@
 </head>
 <body>
 
-
   <div class="keys">
     <div data-key="65" class="key">
       <kbd>A</kbd>
@@ -58,6 +57,31 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+window.addEventListener('keydown',playSound);
+
+function playSound(event) {
+  const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`);
+  const key = document.querySelector(`.key[data-key="${event.keyCode}"]`);
+
+  // Error Handling to prevent unassigned keys from working
+  if (audio === null) {
+    return;
+  }
+  // Short hand is if(!audio) return;
+
+  // To make audio to rewind to the beginning instantly so we can repeatedly hit the keys
+  audio.currentTime = 0;
+  audio.play();
+  key.classList.add('playing');
+}
+
+function removeTransition(e) {
+  if(e.propertyName !== 'transform') return; //skip if it's not a transform
+  this.classList.remove('playing');
+}
+
+const keys = document.querySelectorAll('.key');
+keys.forEach(element => element.addEventListener('transitionend',removeTransition))
 
 </script>
 
